@@ -23,7 +23,6 @@ function createCard(cardData, deleteCallback) {
     const deleteButton = cardElement.querySelector('.card__delete-button');
     deleteButton.addEventListener('click', () => {
         deleteCallback(cardElement);
-        cardElement.remove();
     });
     
     return cardElement;
@@ -32,10 +31,7 @@ function createCard(cardData, deleteCallback) {
 const placesList = document.querySelector('.places__list');
 
 const deleteCard = (card) => {
-    const index = initialCards.findIndex(item => item === card);
-    if (index !== -1) {
-        initialCards.splice(index, 1);
-    }
+    card.remove();
 };
 
 const cardElements = initialCards.map(card => createCard(card, deleteCard));
