@@ -2,7 +2,7 @@
 
 import '../pages/index.css';
 import { initialCards } from './cards.js';
-import { createCard, deleteCard, getLike } from './card.js';
+import { createCard, deleteCard, toggleLike } from './card.js';
 import { openPopup, closePopup, closePopUpByOverlay } from './modal.js';
 import { validationSettings } from './validation.js';
 import { enableValidation, clearValidation } from './validation.js';
@@ -12,7 +12,7 @@ const cardTemplate = document.querySelector('#card-template').content;
 // Все используемые DOM узлы
 const page = document.querySelector('.page');
 const placesList = page.querySelector('.places__list');
-const popup = page.querySelectorAll('.popup');
+const popups = page.querySelectorAll('.popup');
 const popupTypeEdit = page.querySelector('.popup_type_edit');
 const popupTypeNewCard = page.querySelector('.popup_type_new-card');
 const popupTypeImage = page.querySelector('.popup_type_image');
@@ -32,7 +32,7 @@ const popupCloseButton = page.querySelectorAll('.popup__close');
 
 
 initialCards.forEach((item) => {
-  placesList.append(createCard(item, deleteCard, getLike, addImageToPopup, openPopupTypeImage));
+  placesList.append(createCard(item, deleteCard, toggleLike, handleImageClick));
 });
 
 const openPopupProfileEdit = () => {
@@ -48,18 +48,16 @@ const openPopupAddCard = () => {
   openPopup(popupTypeNewCard);
 };
 
-const addImageToPopup = (evt) => {
+const handleImageClick = (evt) => {
   const card = evt.target.closest('.card');
   const cardTitle = card.querySelector('.card__title');
+
   if (evt.target.classList.contains('card__image')) {
     popupImage.src = evt.target.src;
     popupCaption.textContent = cardTitle.textContent;
     popupImage.alt = cardTitle.textContent;
+    openPopup(popupTypeImage);
   }
-};
-
-const openPopupTypeImage = () => {
-  openPopup(popupTypeImage);
 };
 
 const handleFormAddCardSubmit = (evt) => {
@@ -68,7 +66,7 @@ const handleFormAddCardSubmit = (evt) => {
   cardObject.name = inputPlaceNameForm.value;
   cardObject.alt = inputPlaceNameForm.value;
   cardObject.link = inputLinkImageForm.value;
-  const newCard = createCard(cardObject, deleteCard, getLike, addImageToPopup, openPopupTypeImage);
+  const newCard = createCard(cardObject, deleteCard, toggleLike, handleImageClick);
   placesList.prepend(newCard);
   closePopup(popupTypeNewCard);
   formAddCard.reset();
@@ -90,8 +88,8 @@ popupCloseButton.forEach((closeButton) => {
   closeButton.addEventListener('click', closePopupByButton);
 });
 
-popup.forEach((item) => {
-  item.addEventListener('click', closePopUpByOverlay);
+popups.forEach((popup) => {
+  popup.addEventListener('click', closePopUpByOverlay);
 });
 
 formEditProfile.addEventListener('submit', handleFormEditProfileSubmit);
@@ -102,4 +100,3 @@ formAddCard.addEventListener('submit', handleFormAddCardSubmit);
 enableValidation(validationSettings);
 
 export { cardTemplate };
-
