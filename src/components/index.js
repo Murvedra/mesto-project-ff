@@ -1,5 +1,3 @@
-//Импорты из других файлов проекта
-
 import '../pages/index.css';
 import { initialCards } from './cards.js';
 import { createCard, deleteCard, toggleLike } from './card.js';
@@ -9,7 +7,6 @@ import { enableValidation, clearValidation } from './validation.js';
 
 const cardTemplate = document.querySelector('#card-template').content;
 
-// Все используемые DOM узлы
 const page = document.querySelector('.page');
 const placesList = page.querySelector('.places__list');
 const popups = page.querySelectorAll('.popup');
@@ -30,6 +27,17 @@ const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
 const popupCloseButton = page.querySelectorAll('.popup__close');
 
+const handleImageClick = (evt) => {
+  const card = evt.target.closest('.card');
+  const cardTitle = card.querySelector('.card__title');
+
+  if (evt.target.classList.contains('card__image')) {
+    popupImage.src = evt.target.src;
+    popupCaption.textContent = cardTitle.textContent;
+    popupImage.alt = cardTitle.textContent;
+    openPopup(popupTypeImage);
+  }
+};
 
 initialCards.forEach((item) => {
   placesList.append(createCard(item, deleteCard, toggleLike, handleImageClick));
@@ -46,18 +54,6 @@ const openPopupAddCard = () => {
   formAddCard.reset();
   clearValidation(formAddCard, validationSettings);
   openPopup(popupTypeNewCard);
-};
-
-const handleImageClick = (evt) => {
-  const card = evt.target.closest('.card');
-  const cardTitle = card.querySelector('.card__title');
-
-  if (evt.target.classList.contains('card__image')) {
-    popupImage.src = evt.target.src;
-    popupCaption.textContent = cardTitle.textContent;
-    popupImage.alt = cardTitle.textContent;
-    openPopup(popupTypeImage);
-  }
 };
 
 const handleFormAddCardSubmit = (evt) => {
