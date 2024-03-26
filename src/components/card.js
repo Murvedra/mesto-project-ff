@@ -20,11 +20,6 @@ function createCard(cardData, deleteCard, toggleLike, handleImageClick) {
   return cardElement;
 }
 
-function handleImageClick(evt) {
-  addImageToPopup(evt);
-  openPopupTypeImage();
-} 
-
 function deleteCard(evt) {
   const card = evt.target.closest('.card');
   card.remove();
@@ -34,4 +29,4 @@ function toggleLike(evt) {
   evt.target.classList.toggle('card__like-button_is-active');
 }
 
-export { createCard, deleteCard, toggleLike, handleImageClick };
+export { createCard, deleteCard, toggleLike };

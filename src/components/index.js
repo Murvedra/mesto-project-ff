@@ -25,7 +25,7 @@ const inputLinkImageForm = formAddCard.querySelector('.popup__input_type_url');
 const formEditProfile = page.querySelector('.popup_type_edit .popup__form');
 const profileEditButton = page.querySelector('.profile__edit-button');
 const profileAddButton = page.querySelector('.profile__add-button');
-const popupCloseButton = page.querySelectorAll('.popup__close');
+const popupCloseButtons = page.querySelectorAll('.popup__close');
 
 const handleImageClick = (evt) => {
   const card = evt.target.closest('.card');
@@ -80,7 +80,7 @@ const handleFormEditProfileSubmit = (evt) => {
   closePopup(popupTypeEdit);
 };
 
-popupCloseButton.forEach((closeButton) => {
+popupCloseButtons.forEach((closeButton) => {
   closeButton.addEventListener('click', closePopupByButton);
 });
 
