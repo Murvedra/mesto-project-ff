@@ -92,22 +92,26 @@ profileAddButton.addEventListener("click", function () {
   openModal(popupTypeNewCard);
 });
 
-  // Обработка отправки формы редактирования профиля
-function handleFormSubmitEditProfile(evt) {
-  evt.preventDefault();
-  renderLoading(true, popupTypeEdit);
-  updateUserInformation(nameInput.value, jobInput.value)
-    .then((user) => {
-      profileTitle.textContent = user.name;
-      profileDescription.textContent = user.about;
-    })
-    .catch((err) => console.log(err))
-    .finally(() => renderLoading(false, popupTypeEdit));
-  closeModal(popupTypeEdit);
-}
-editFormElement.addEventListener("submit", function (evt) {
-  handleFormSubmitEditProfile(evt);
-});
+  // Обработка отправки формы редактирования профиля 
+  function handleFormSubmitEditProfile(evt) {
+    evt.preventDefault();
+    renderLoading(true, popupTypeEdit);
+    updateUserInformation(nameInput.value, jobInput.value)
+      .then((user) => {
+        profileTitle.textContent = user.name;
+        profileDescription.textContent = user.about;
+        renderLoading(false, popupTypeEdit);
+        closeModal(popupTypeEdit);
+      })
+      .catch((err) => {
+        console.log(err);
+        renderLoading(false, popupTypeEdit);
+      });
+  }
+  
+  editFormElement.addEventListener("submit", function (evt) {
+    handleFormSubmitEditProfile(evt);
+  });
 
   // Обработка отправки формы изменения аватара
 function handleFormSubmitAvatarForm(evt) {
@@ -127,28 +131,29 @@ avatarFormElement.addEventListener("submit", function (evt) {
 });
 
   // Обработка отправки формы добавления новой карточки
-function addCard(evt) {
-  evt.preventDefault();
-  renderLoading(true, popupTypeNewCard);
-  updateNewCard(placeName.value, placeUrl.value)
-    .then((card) => {
-      placesList.prepend(
-        createCard(
-          card,
-          userId,
-          removeCard,
-          getOrRemovelike,
-          openPopupTypeImage
-        )
-      );
-    })
-    .catch((err) => console.log(err))
-    .finally(() => renderLoading(false, popupTypeNewCard));
-  placeName.value = "";
-  placeUrl.value = "";
-  closeModal(popupTypeNewCard);
-}
-newCardFormElement.addEventListener("submit", addCard);
+  function addCard(evt) {
+    evt.preventDefault();
+    renderLoading(true, popupTypeNewCard);
+    updateNewCard(placeName.value, placeUrl.value)
+      .then((card) => {
+        placesList.prepend(
+          createCard(
+            card,
+            userId,
+            removeCard,
+            getOrRemovelike,
+            openPopupTypeImage
+          )
+        );
+        placeName.value = "";
+        placeUrl.value = "";
+        closeModal(popupTypeNewCard);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => renderLoading(false, popupTypeNewCard));
+  }
+  
+  newCardFormElement.addEventListener("submit", addCard);
 
 let userId;
 
@@ -160,7 +165,7 @@ Promise.all([getUserInfo(), getInitialCards()])
     profileDescription.textContent = user.about;
     profileImage.style.backgroundImage = `url(${user.avatar})`;
     cards.forEach((card) => {
-      placesList.prepend(
+      placesList.append(
         createCard(
           card,
           userId,
