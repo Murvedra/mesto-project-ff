@@ -100,15 +100,11 @@ profileAddButton.addEventListener("click", function () {
       .then((user) => {
         profileTitle.textContent = user.name;
         profileDescription.textContent = user.about;
-        renderLoading(false, popupTypeEdit);
         closeModal(popupTypeEdit);
       })
-      .catch((err) => {
-        console.log(err);
-        renderLoading(false, popupTypeEdit);
-      });
+      .catch((err) => console.log(err))
+      .finally(() => renderLoading(false, popupTypeEdit));
   }
-  
   editFormElement.addEventListener("submit", function (evt) {
     handleFormSubmitEditProfile(evt);
   });
@@ -120,10 +116,10 @@ function handleFormSubmitAvatarForm(evt) {
   updateNewAvatar(avatarInput.value)
     .then((user) => {
       profileImage.style.backgroundImage = `url(${user.avatar})`;
+      closeModal(popupTypeAvatar);
     })
     .catch((err) => console.log(err))
     .finally(() => renderLoading(false, popupTypeAvatar));
-  closeModal(popupTypeAvatar);
 }
 
 avatarFormElement.addEventListener("submit", function (evt) {
